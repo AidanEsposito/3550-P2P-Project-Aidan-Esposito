@@ -251,11 +251,13 @@ async fn main() {
                         .floodsub
                         .publish(TOPIC.clone(), json.as_bytes());
                 }
+
+                //modify
                 EventType::Input(line) => match line.as_str() {
                     "ls p" => handle_list_peers(&mut swarm).await,
-                    cmd if cmd.starts_with("ls r") => handle_list_books(cmd, &mut swarm).await,
-                    cmd if cmd.starts_with("create r") => handle_create_book(cmd).await,
-                    cmd if cmd.starts_with("publish r") => handle_publish_book(cmd).await,
+                    cmd if cmd.starts_with("ls b") => handle_list_books(cmd, &mut swarm).await,
+                    cmd if cmd.starts_with("create b") => handle_create_book(cmd).await,
+                    cmd if cmd.starts_with("publish b") => handle_publish_book(cmd).await,
                     _ => error!("unknown command"),
                 },
             }
@@ -274,7 +276,7 @@ async fn handle_list_peers(swarm: &mut Swarm<BookBehaviour>) {
 }
 
 async fn handle_list_books(cmd: &str, swarm: &mut Swarm<BookBehaviour>) {
-    let rest = cmd.strip_prefix("ls r ");
+    let rest = cmd.strip_prefix("ls b ");
     match rest {
         Some("all") => {
             let req = ListRequest {
@@ -309,7 +311,7 @@ async fn handle_list_books(cmd: &str, swarm: &mut Swarm<BookBehaviour>) {
 }
 
 async fn handle_create_book(cmd: &str) {
-    if let Some(rest) = cmd.strip_prefix("create r") {
+    if let Some(rest) = cmd.strip_prefix("create b") {
         let elements: Vec<&str> = rest.split("|").collect();
         if elements.len() < 3 {
             info!("too few arguments - Format: name|description|review");
@@ -325,7 +327,7 @@ async fn handle_create_book(cmd: &str) {
 }
 
 async fn handle_publish_book(cmd: &str) {
-    if let Some(rest) = cmd.strip_prefix("publish r") {
+    if let Some(rest) = cmd.strip_prefix("publish b") {
         match rest.trim().parse::<usize>() {
             Ok(id) => {
                 if let Err(e) = publish_book(id).await {
