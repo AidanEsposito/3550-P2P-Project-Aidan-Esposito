@@ -1,0 +1,10 @@
+C:\Users\aidan\git\3550-P2P-Project-Aidan-Esposito\P2P-Network-Project\target\debug\deps\libipconfig-c83ea69edcd156af.rmeta: C:\Users\aidan\.cargo\registry\src\index.crates.io-6f17d22bba15001f\ipconfig-0.2.2\src\lib.rs C:\Users\aidan\.cargo\registry\src\index.crates.io-6f17d22bba15001f\ipconfig-0.2.2\src\adapter.rs C:\Users\aidan\.cargo\registry\src\index.crates.io-6f17d22bba15001f\ipconfig-0.2.2\src\bindings\mod.rs C:\Users\aidan\.cargo\registry\src\index.crates.io-6f17d22bba15001f\ipconfig-0.2.2\src\bindings\win64.rs C:\Users\aidan\.cargo\registry\src\index.crates.io-6f17d22bba15001f\ipconfig-0.2.2\src\computer.rs C:\Users\aidan\.cargo\registry\src\index.crates.io-6f17d22bba15001f\ipconfig-0.2.2\src\error.rs
+
+C:\Users\aidan\git\3550-P2P-Project-Aidan-Esposito\P2P-Network-Project\target\debug\deps\ipconfig-c83ea69edcd156af.d: C:\Users\aidan\.cargo\registry\src\index.crates.io-6f17d22bba15001f\ipconfig-0.2.2\src\lib.rs C:\Users\aidan\.cargo\registry\src\index.crates.io-6f17d22bba15001f\ipconfig-0.2.2\src\adapter.rs C:\Users\aidan\.cargo\registry\src\index.crates.io-6f17d22bba15001f\ipconfig-0.2.2\src\bindings\mod.rs C:\Users\aidan\.cargo\registry\src\index.crates.io-6f17d22bba15001f\ipconfig-0.2.2\src\bindings\win64.rs C:\Users\aidan\.cargo\registry\src\index.crates.io-6f17d22bba15001f\ipconfig-0.2.2\src\computer.rs C:\Users\aidan\.cargo\registry\src\index.crates.io-6f17d22bba15001f\ipconfig-0.2.2\src\error.rs
+
+C:\Users\aidan\.cargo\registry\src\index.crates.io-6f17d22bba15001f\ipconfig-0.2.2\src\lib.rs:
+C:\Users\aidan\.cargo\registry\src\index.crates.io-6f17d22bba15001f\ipconfig-0.2.2\src\adapter.rs:
+C:\Users\aidan\.cargo\registry\src\index.crates.io-6f17d22bba15001f\ipconfig-0.2.2\src\bindings\mod.rs:
+C:\Users\aidan\.cargo\registry\src\index.crates.io-6f17d22bba15001f\ipconfig-0.2.2\src\bindings\win64.rs:
+C:\Users\aidan\.cargo\registry\src\index.crates.io-6f17d22bba15001f\ipconfig-0.2.2\src\computer.rs:
+C:\Users\aidan\.cargo\registry\src\index.crates.io-6f17d22bba15001f\ipconfig-0.2.2\src\error.rs:

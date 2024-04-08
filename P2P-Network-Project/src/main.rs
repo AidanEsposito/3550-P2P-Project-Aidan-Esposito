@@ -16,21 +16,23 @@ use serde::{Deserialize, Serialize};
 use std::collections::HashSet;
 use tokio::{fs, io::AsyncBufReadExt, sync::mpsc};
 
-const STORAGE_FILE_PATH: &str = "./recipes.json";
+const STORAGE_FILE_PATH: &str = "./books.json";
 
 type Result<T> = std::result::Result<T, Box<dyn std::error::Error + Send + Sync + 'static>>;
-type Recipes = Vec<Recipe>;
+type Books = Vec<Book>;
 
 static KEYS: Lazy<identity::Keypair> = Lazy::new(|| identity::Keypair::generate_ed25519());
 static PEER_ID: Lazy<PeerId> = Lazy::new(|| PeerId::from(KEYS.public()));
-static TOPIC: Lazy<Topic> = Lazy::new(|| Topic::new("recipes"));
+static TOPIC: Lazy<Topic> = Lazy::new(|| Topic::new("books"));
 
+
+//CHANGE
 #[derive(Debug, Serialize, Deserialize)]
-struct Recipe {
+struct Book {
     id: usize,
     name: String,
-    ingredients: String,
-    instructions: String,
+    description: String,
+    review: String,
     public: bool,
 }
 
@@ -48,7 +50,7 @@ struct ListRequest {
 #[derive(Debug, Serialize, Deserialize)]
 struct ListResponse {
     mode: ListMode,
-    data: Recipes,
+    data: Books,
     receiver: String,
 }
 
@@ -58,14 +60,14 @@ enum EventType {
 }
 
 #[derive(NetworkBehaviour)]
-struct RecipeBehaviour {
+struct BookBehaviour {
     floodsub: Floodsub,
     mdns: Mdns,
     #[behaviour(ignore)]
     response_sender: mpsc::UnboundedSender<ListResponse>,
 }
 
-impl NetworkBehaviourEventProcess<FloodsubEvent> for RecipeBehaviour {
+impl NetworkBehaviourEventProcess<FloodsubEvent> for BookBehaviour {
     fn inject_event(&mut self, event: FloodsubEvent) {
         match event {
             FloodsubEvent::Message(msg) => {
@@ -78,7 +80,7 @@ impl NetworkBehaviourEventProcess<FloodsubEvent> for RecipeBehaviour {
                     match req.mode {
                         ListMode::ALL => {
                             info!("Received ALL req: {:?} from {:?}", req, msg.source);
-                            respond_with_public_recipes(
+                            respond_with_public_books(
                                 self.response_sender.clone(),
                                 msg.source.to_string(),
                             );
@@ -86,7 +88,7 @@ impl NetworkBehaviourEventProcess<FloodsubEvent> for RecipeBehaviour {
                         ListMode::One(ref peer_id) => {
                             if peer_id == &PEER_ID.to_string() {
                                 info!("Received req: {:?} from {:?}", req, msg.source);
-                                respond_with_public_recipes(
+                                respond_with_public_books(
                                     self.response_sender.clone(),
                                     msg.source.to_string(),
                                 );
@@ -100,25 +102,25 @@ impl NetworkBehaviourEventProcess<FloodsubEvent> for RecipeBehaviour {
     }
 }
 
-fn respond_with_public_recipes(sender: mpsc::UnboundedSender<ListResponse>, receiver: String) {
+fn respond_with_public_books(sender: mpsc::UnboundedSender<ListResponse>, receiver: String) {
     tokio::spawn(async move {
-        match read_local_recipes().await {
-            Ok(recipes) => {
+        match read_local_books().await {
+            Ok(books) => {
                 let resp = ListResponse {
                     mode: ListMode::ALL,
                     receiver,
-                    data: recipes.into_iter().filter(|r| r.public).collect(),
+                    data: books.into_iter().filter(|r| r.public).collect(),
                 };
                 if let Err(e) = sender.send(resp) {
                     error!("error sending response via channel, {}", e);
                 }
             }
-            Err(e) => error!("error fetching local recipes to answer ALL request, {}", e),
+            Err(e) => error!("error fetching local books to answer ALL request, {}", e),
         }
     });
 }
 
-impl NetworkBehaviourEventProcess<MdnsEvent> for RecipeBehaviour {
+impl NetworkBehaviourEventProcess<MdnsEvent> for BookBehaviour {
     fn inject_event(&mut self, event: MdnsEvent) {
         match event {
             MdnsEvent::Discovered(discovered_list) => {
@@ -137,47 +139,50 @@ impl NetworkBehaviourEventProcess<MdnsEvent> for RecipeBehaviour {
     }
 }
 
-async fn create_new_recipe(name: &str, ingredients: &str, instructions: &str) -> Result<()> {
-    let mut local_recipes = read_local_recipes().await?;
-    let new_id = match local_recipes.iter().max_by_key(|r| r.id) {
+async fn create_new_book(name: &str, description: &str, review: &str) -> Result<()> {
+    let mut local_books = read_local_books().await?;
+    let new_id = match local_books.iter().max_by_key(|r| r.id) {
         Some(v) => v.id + 1,
         None => 0,
     };
-    local_recipes.push(Recipe {
+    // Create a new Book struct instead of a Vec<Book>
+    let new_book = Book {
         id: new_id,
         name: name.to_owned(),
-        ingredients: ingredients.to_owned(),
-        instructions: instructions.to_owned(),
+        description: description.to_owned(),
+        review: review.to_owned(),
         public: false,
-    });
-    write_local_recipes(&local_recipes).await?;
+    };
+    // Push the new Book into the vector
+    local_books.push(new_book);
+    write_local_books(&local_books).await?;
 
-    info!("Created recipe:");
+    info!("Created book:");
     info!("Name: {}", name);
-    info!("Ingredients: {}", ingredients);
-    info!("Instructions:: {}", instructions);
+    info!("Description: {}", description);
+    info!("Review:: {}", review);
 
     Ok(())
 }
 
-async fn publish_recipe(id: usize) -> Result<()> {
-    let mut local_recipes = read_local_recipes().await?;
-    local_recipes
+async fn publish_book(id: usize) -> Result<()> {
+    let mut local_books = read_local_books().await?;
+    local_books
         .iter_mut()
         .filter(|r| r.id == id)
         .for_each(|r| r.public = true);
-    write_local_recipes(&local_recipes).await?;
+    write_local_books(&local_books).await?;
     Ok(())
 }
 
-async fn read_local_recipes() -> Result<Recipes> {
+async fn read_local_books() -> Result<Books> {
     let content = fs::read(STORAGE_FILE_PATH).await?;
     let result = serde_json::from_slice(&content)?;
     Ok(result)
 }
 
-async fn write_local_recipes(recipes: &Recipes) -> Result<()> {
-    let json = serde_json::to_string(&recipes)?;
+async fn write_local_books(books: &Books) -> Result<()> {
+    let json = serde_json::to_string(&books)?;
     fs::write(STORAGE_FILE_PATH, &json).await?;
     Ok(())
 }
@@ -199,7 +204,7 @@ async fn main() {
         .multiplex(mplex::MplexConfig::new())
         .boxed();
 
-    let mut behaviour = RecipeBehaviour {
+    let mut behaviour = BookBehaviour {
         floodsub: Floodsub::new(PEER_ID.clone()),
         mdns: Mdns::new(Default::default())
             .await
@@ -248,9 +253,9 @@ async fn main() {
                 }
                 EventType::Input(line) => match line.as_str() {
                     "ls p" => handle_list_peers(&mut swarm).await,
-                    cmd if cmd.starts_with("ls r") => handle_list_recipes(cmd, &mut swarm).await,
-                    cmd if cmd.starts_with("create r") => handle_create_recipe(cmd).await,
-                    cmd if cmd.starts_with("publish r") => handle_publish_recipe(cmd).await,
+                    cmd if cmd.starts_with("ls r") => handle_list_books(cmd, &mut swarm).await,
+                    cmd if cmd.starts_with("create r") => handle_create_book(cmd).await,
+                    cmd if cmd.starts_with("publish r") => handle_publish_book(cmd).await,
                     _ => error!("unknown command"),
                 },
             }
@@ -258,7 +263,7 @@ async fn main() {
     }
 }
 
-async fn handle_list_peers(swarm: &mut Swarm<RecipeBehaviour>) {
+async fn handle_list_peers(swarm: &mut Swarm<BookBehaviour>) {
     info!("Discovered Peers:");
     let nodes = swarm.behaviour().mdns.discovered_nodes();
     let mut unique_peers = HashSet::new();
@@ -268,7 +273,7 @@ async fn handle_list_peers(swarm: &mut Swarm<RecipeBehaviour>) {
     unique_peers.iter().for_each(|p| info!("{}", p));
 }
 
-async fn handle_list_recipes(cmd: &str, swarm: &mut Swarm<RecipeBehaviour>) {
+async fn handle_list_books(cmd: &str, swarm: &mut Swarm<BookBehaviour>) {
     let rest = cmd.strip_prefix("ls r ");
     match rest {
         Some("all") => {
@@ -281,9 +286,9 @@ async fn handle_list_recipes(cmd: &str, swarm: &mut Swarm<RecipeBehaviour>) {
                 .floodsub
                 .publish(TOPIC.clone(), json.as_bytes());
         }
-        Some(recipes_peer_id) => {
+        Some(books_peer_id) => {
             let req = ListRequest {
-                mode: ListMode::One(recipes_peer_id.to_owned()),
+                mode: ListMode::One(books_peer_id.to_owned()),
             };
             let json = serde_json::to_string(&req).expect("can jsonify request");
             swarm
@@ -292,41 +297,41 @@ async fn handle_list_recipes(cmd: &str, swarm: &mut Swarm<RecipeBehaviour>) {
                 .publish(TOPIC.clone(), json.as_bytes());
         }
         None => {
-            match read_local_recipes().await {
+            match read_local_books().await {
                 Ok(v) => {
-                    info!("Local Recipes ({})", v.len());
+                    info!("Local Books ({})", v.len());
                     v.iter().for_each(|r| info!("{:?}", r));
                 }
-                Err(e) => error!("error fetching local recipes: {}", e),
+                Err(e) => error!("error fetching local books: {}", e),
             };
         }
     };
 }
 
-async fn handle_create_recipe(cmd: &str) {
+async fn handle_create_book(cmd: &str) {
     if let Some(rest) = cmd.strip_prefix("create r") {
         let elements: Vec<&str> = rest.split("|").collect();
         if elements.len() < 3 {
-            info!("too few arguments - Format: name|ingredients|instructions");
+            info!("too few arguments - Format: name|description|review");
         } else {
             let name = elements.get(0).expect("name is there");
-            let ingredients = elements.get(1).expect("ingredients is there");
-            let instructions = elements.get(2).expect("instructions is there");
-            if let Err(e) = create_new_recipe(name, ingredients, instructions).await {
-                error!("error creating recipe: {}", e);
+            let description = elements.get(1).expect("description is there");
+            let review = elements.get(2).expect("review is there");
+            if let Err(e) = create_new_book(name, description, review).await {
+                error!("error creating book: {}", e);
             };
         }
     }
 }
 
-async fn handle_publish_recipe(cmd: &str) {
+async fn handle_publish_book(cmd: &str) {
     if let Some(rest) = cmd.strip_prefix("publish r") {
         match rest.trim().parse::<usize>() {
             Ok(id) => {
-                if let Err(e) = publish_recipe(id).await {
-                    info!("error publishing recipe with id {}, {}", id, e)
+                if let Err(e) = publish_book(id).await {
+                    info!("error publishing book with id {}, {}", id, e)
                 } else {
-                    info!("Published Recipe with id: {}", id);
+                    info!("Published Book with id: {}", id);
                 }
             }
             Err(e) => error!("invalid id: {}, {}", rest.trim(), e),

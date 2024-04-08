@@ -1,0 +1,14 @@
+C:\Users\aidan\git\3550-P2P-Project-Aidan-Esposito\P2P-Network-Project\target\debug\deps\liblibp2p_identify-662bc17d6ed9df2a.rmeta: C:\Users\aidan\.cargo\registry\src\index.crates.io-6f17d22bba15001f\libp2p-identify-0.30.0\src\lib.rs C:\Users\aidan\.cargo\registry\src\index.crates.io-6f17d22bba15001f\libp2p-identify-0.30.0\src\handler.rs C:\Users\aidan\.cargo\registry\src\index.crates.io-6f17d22bba15001f\libp2p-identify-0.30.0\src\identify.rs C:\Users\aidan\.cargo\registry\src\index.crates.io-6f17d22bba15001f\libp2p-identify-0.30.0\src\protocol.rs C:\Users\aidan\git\3550-P2P-Project-Aidan-Esposito\P2P-Network-Project\target\debug\build\libp2p-identify-49f1f722528baed5\out/structs.rs
+
+C:\Users\aidan\git\3550-P2P-Project-Aidan-Esposito\P2P-Network-Project\target\debug\deps\liblibp2p_identify-662bc17d6ed9df2a.rlib: C:\Users\aidan\.cargo\registry\src\index.crates.io-6f17d22bba15001f\libp2p-identify-0.30.0\src\lib.rs C:\Users\aidan\.cargo\registry\src\index.crates.io-6f17d22bba15001f\libp2p-identify-0.30.0\src\handler.rs C:\Users\aidan\.cargo\registry\src\index.crates.io-6f17d22bba15001f\libp2p-identify-0.30.0\src\identify.rs C:\Users\aidan\.cargo\registry\src\index.crates.io-6f17d22bba15001f\libp2p-identify-0.30.0\src\protocol.rs C:\Users\aidan\git\3550-P2P-Project-Aidan-Esposito\P2P-Network-Project\target\debug\build\libp2p-identify-49f1f722528baed5\out/structs.rs
+
+C:\Users\aidan\git\3550-P2P-Project-Aidan-Esposito\P2P-Network-Project\target\debug\deps\libp2p_identify-662bc17d6ed9df2a.d: C:\Users\aidan\.cargo\registry\src\index.crates.io-6f17d22bba15001f\libp2p-identify-0.30.0\src\lib.rs C:\Users\aidan\.cargo\registry\src\index.crates.io-6f17d22bba15001f\libp2p-identify-0.30.0\src\handler.rs C:\Users\aidan\.cargo\registry\src\index.crates.io-6f17d22bba15001f\libp2p-identify-0.30.0\src\identify.rs C:\Users\aidan\.cargo\registry\src\index.crates.io-6f17d22bba15001f\libp2p-identify-0.30.0\src\protocol.rs C:\Users\aidan\git\3550-P2P-Project-Aidan-Esposito\P2P-Network-Project\target\debug\build\libp2p-identify-49f1f722528baed5\out/structs.rs
+
+C:\Users\aidan\.cargo\registry\src\index.crates.io-6f17d22bba15001f\libp2p-identify-0.30.0\src\lib.rs:
+C:\Users\aidan\.cargo\registry\src\index.crates.io-6f17d22bba15001f\libp2p-identify-0.30.0\src\handler.rs:
+C:\Users\aidan\.cargo\registry\src\index.crates.io-6f17d22bba15001f\libp2p-identify-0.30.0\src\identify.rs:
+C:\Users\aidan\.cargo\registry\src\index.crates.io-6f17d22bba15001f\libp2p-identify-0.30.0\src\protocol.rs:
+C:\Users\aidan\git\3550-P2P-Project-Aidan-Esposito\P2P-Network-Project\target\debug\build\libp2p-identify-49f1f722528baed5\out/structs.rs:
+
+# env-dep:CARGO_PKG_VERSION=0.30.0
+# env-dep:OUT_DIR=C:\\Users\\aidan\\git\\3550-P2P-Project-Aidan-Esposito\\P2P-Network-Project\\target\\debug\\build\\libp2p-identify-49f1f722528baed5\\out

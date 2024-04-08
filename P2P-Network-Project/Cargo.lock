@@ -2395,7 +2395,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "rust-peer-to-peer-example"
+name = "rust-peer-to-peer-project"
 version = "0.1.0"
 dependencies = [
  "libp2p",

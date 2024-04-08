@@ -1,0 +1,6 @@
+C:\Users\aidan\git\3550-P2P-Project-Aidan-Esposito\P2P-Network-Project\target\debug\deps\liblibp2p_pnet-29047885165be95b.rmeta: C:\Users\aidan\.cargo\registry\src\index.crates.io-6f17d22bba15001f\libp2p-pnet-0.21.0\src\lib.rs C:\Users\aidan\.cargo\registry\src\index.crates.io-6f17d22bba15001f\libp2p-pnet-0.21.0\src\crypt_writer.rs
+
+C:\Users\aidan\git\3550-P2P-Project-Aidan-Esposito\P2P-Network-Project\target\debug\deps\libp2p_pnet-29047885165be95b.d: C:\Users\aidan\.cargo\registry\src\index.crates.io-6f17d22bba15001f\libp2p-pnet-0.21.0\src\lib.rs C:\Users\aidan\.cargo\registry\src\index.crates.io-6f17d22bba15001f\libp2p-pnet-0.21.0\src\crypt_writer.rs
+
+C:\Users\aidan\.cargo\registry\src\index.crates.io-6f17d22bba15001f\libp2p-pnet-0.21.0\src\lib.rs:
+C:\Users\aidan\.cargo\registry\src\index.crates.io-6f17d22bba15001f\libp2p-pnet-0.21.0\src\crypt_writer.rs:
